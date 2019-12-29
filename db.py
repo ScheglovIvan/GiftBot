@@ -88,3 +88,9 @@ class DataBase():
                 )
         else:
             pass
+
+    def ExitBan(self, user_id):
+        self.cur.execute(
+            "UPDATE orders SET user_id = 0 WHERE user_id = %d" % (user_id)
+            )
+        return "Бан отменен!!!"

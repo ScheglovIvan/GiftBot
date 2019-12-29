@@ -155,6 +155,15 @@ def gift_buy(call):
 
 bot = telebot.TeleBot("944212634:AAF80_96RqGSixn3NLE3PGIcnpFN-e-_0YU", threaded=False)
 
+
+# /ExitBan
+@bot.message_handler(commands=['ExitBan'])
+def ExitBan(message):
+    db = DataBase()
+    mess = db.ExitBan(message.chat.id)
+    
+    bot.send_message(message.chat.id, mess)
+
 # /Список Лапухов
 @bot.message_handler(commands=['getBurdock'])
 def Burdock(message):
@@ -176,7 +185,7 @@ def Burdock(message):
         bot.send_message(message.chat.id, mess)
 
 
-# /getClick
+# /ClickCount
 @bot.message_handler(commands=['ClickCount'])
 def ClickCount(message):
     db = DataBase()
