@@ -55,3 +55,36 @@ class DataBase():
         self.cur.execute("SELECT * FROM orders")
         orders = self.cur.fetchall()
         return orders
+
+    def getClick(self, *args):
+        if not args:
+            self.cur.execute("SELECT * FROM click")
+            click = self.cur.fetchall()
+        else:
+            self.cur.execute("SELECT * FROM click ORDER BY id DESC LIMIT %d" % (args[0]))
+            click = self.cur.fetchall()
+        if not click:
+            return False
+        else:
+            return click
+
+    def getClickCount(self):
+        self.cur.execute("SELECT id FROM click ORDER BY id DESC LIMIT 1")
+        СlickCount = self.cur.fetchall()
+
+        if not СlickCount:
+            return False
+        else:
+            return СlickCount[0][0]
+    
+    
+    def newClick(self, user_id, user_name):
+        self.cur.execute("SELECT * FROM click WHERE user_id = %d" % (user_id))
+        click = self.cur.fetchall()
+
+        if not click:
+            self.cur.execute(
+                    "INSERT INTO click (user_id, user_name) VALUES (%d, %r)" % (user_id, user_name)
+                )
+        else:
+            pass

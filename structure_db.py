@@ -19,6 +19,13 @@ def create_tables():
             USED BOOLEAN DEFAULT FALSE
         )
         """,
+        """
+        CREATE TABLE CLICK (
+            ID SERIAL PRIMARY KEY,
+            USER_ID INT,
+            USER_NAME CHAR(50)
+        )
+        """,
         )
 
     con = psycopg2.connect(

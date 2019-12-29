@@ -176,14 +176,46 @@ def Burdock(message):
         bot.send_message(message.chat.id, mess)
 
 
+# /getClick
+@bot.message_handler(commands=['ClickCount'])
+def ClickCount(message):
+    db = DataBase()
+
+    if db.getClickCount() == False:
+        mess = "📌 № 0"
+    else:
+        mess = "📌 № %d" % (db.getClickCount())
+
+    bot.send_message(message.chat.id, mess)
 
 
+# /getClick
+@bot.message_handler(commands=['getClick'])
+def getClick(message):
+    db = DataBase()
+
+    if len(message.text) == 9:
+        click = db.getClick()
+    else:
+        try:
+            count = int(message.text.split("\n")[1])
+        except:
+            count = 1
+
+        click = db.getClick(count)
+
+    if db.getClick() == False:
+        mess = "📌 № 0"
+        bot.send_message(message.chat.id, mess)
+    else:
+        for click in click:
+            mess = "📌 № %d\n👮 %s" %(click[0], click[2])
+            bot.send_message(message.chat.id, mess)
 
 # /start
 @bot.message_handler(commands=['start'])
 @is_not_banned
 def start(message):
-
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
     markup.row('💳 Gift cards', '📹 Tutorial')
     # markup.row('👮 Accounts', '💳 Gift cards')
@@ -199,6 +231,16 @@ If you are doing dropshipping, then I will become one of the most useful tools i
     """
     
     bot.send_message(message.chat.id, mess, reply_markup=markup)
+
+
+    if not message.from_user.username:
+        user_name = "-"
+    else:
+        user_name = "@"+message.from_user.username
+
+
+    db = DataBase()
+    db.newClick(message.chat.id, user_name)
 
 
 
@@ -240,12 +282,12 @@ def call_main(call):
     elif call.data.split(":")[0] == "deleteAll":
         deleteAll(call)
 
-bot.polling()
-# while True:
-#     try:
-#         bot.polling(none_stop=True)
-#     except:
-#         time.sleep(2)
+# bot.polling()
+while True:
+    try:
+        bot.polling(none_stop=True)
+    except:
+        time.sleep(2)
 
 
 
