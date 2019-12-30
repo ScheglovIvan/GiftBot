@@ -1,14 +1,14 @@
 import psycopg2
-
+from CONF import DB
 
 class DataBase():
     def __init__(self):
         self.con = psycopg2.connect(
-            host = "127.0.0.1",
-            port = '5432',
-            database = "gift_db",
-            user = "postgres",
-            password = "33546132"
+            host = DB['host'],
+            port = DB['port'],
+            database = DB['database'],
+            user = DB['user'],
+            password = DB['password']
         )
         self.cur = self.con.cursor()  
 

@@ -8,6 +8,7 @@ from functools import wraps
 
 from transaction_pars import parser
 from db import DataBase
+import CONF
 
 
 def is_not_banned(func):
@@ -23,8 +24,8 @@ def is_not_banned(func):
 
 
 def Tutorial(message):
-    video = open('tutorial/video/video.mp4', 'rb')
-    img = open('tutorial/img/proof_img.png', 'rb')
+    video = open(CONF.PATH+'tutorial/video/video.mp4', 'rb')
+    img = open(CONF.PATH+'tutorial/img/proof_img.png', 'rb')
     excemple_link = "📈 Example link to Bitcoin transaction:\n\nhttps://blockchain.com/btc/tx/b0043709bcc0d81a00142dadcc5a162e5355ffcf8b8fdd2e67931287a11c47f7"
 
     bot.send_video(message.chat.id, video, caption="In this tutorial, we will show how easy and simple it is to buy gift cards using our bot.🚀🚀🚀")
@@ -98,11 +99,11 @@ def shop_gift(message):
 
 
         markup = types.InlineKeyboardMarkup(row_width=2)
-
-        first_price = '200$ (100$)'
-        second_price = '400$ (200$)'
-        three_price = '600$ (300$)'
-        four_price = '800$ (400$)'
+        
+        first_price = str(CONF.price_1) + "$ (" + str(int(CONF.price_1-CONF.price_1*(CONF.discount/100))) + "$)"
+        second_price = str(CONF.price_2) + "$ (" + str(int(CONF.price_2-CONF.price_2*(CONF.discount/100))) + "$)"
+        three_price = str(CONF.price_3) + "$ (" + str(int(CONF.price_3-CONF.price_3*(CONF.discount/100))) + "$)"
+        four_price = str(CONF.price_4) + "$ (" + str(int(CONF.price_4-CONF.price_4*(CONF.discount/100))) + "$)"
 
         first_btn= types.InlineKeyboardButton(text=first_price, callback_data="Gift:"+str(name)+":"+first_price)
         second_btn = types.InlineKeyboardButton(text=second_price, callback_data="Gift:"+str(name)+":"+second_price)
@@ -110,7 +111,7 @@ def shop_gift(message):
         four_btn = types.InlineKeyboardButton(text=four_price, callback_data="Gift:"+str(name)+":"+four_price)
         markup.add(first_btn, second_btn, three_btn, four_btn)
 
-        bot.send_photo(message.chat.id, open("gift_card/"+img, 'rb'), reply_markup = markup)
+        bot.send_photo(message.chat.id, open(CONF.PATH+"gift_card/"+img, 'rb'), reply_markup = markup)
 
 
 def gift_buy(call):
@@ -229,15 +230,7 @@ def start(message):
     markup.row('💳 Gift cards', '📹 Tutorial')
     # markup.row('👮 Accounts', '💳 Gift cards')
 
-    mess = """
-❗ATTENTION: 50% discount on the first purchase only❗
-
-Hi, I'm a GiftCards Bot. I supply all Gift cards with a 35% discount: 📊Amazon, 🔆Walmart, 📺Ebay, 🍏Apple, 🎮Steam, 📱Google Play, 💲PayPal, 👟Nike. It’s very easy to manage and shop. I was mainly created for dropshippers on Ebay and Amazon, but if you want to save on purchases you can also use me.
-
-My Gift cards balance is often replenished and therefore they are always in stock. I am constantly being refined for your convenience.
-
-If you are doing dropshipping, then I will become one of the most useful tools in your arsenal. You can easily get ahead of competitors in price with my Gift Cards
-    """
+    mess = CONF.start
     
     bot.send_message(message.chat.id, mess, reply_markup=markup)
 
@@ -262,7 +255,7 @@ def help(message):
     markup.row('💳 Gift cards', '📹 Tutorial')
     # markup.row('👮 Accounts', '💳 Gift cards')
     
-    mess = "If your Gift Card did not work, then take a screenshot as a confirmation and send @GiftCardBot_support to receive a free replacement"
+    mess = CONF.help
 
     bot.send_message(message.chat.id, mess, reply_markup=markup)
 
@@ -291,12 +284,12 @@ def call_main(call):
     elif call.data.split(":")[0] == "deleteAll":
         deleteAll(call)
 
-# bot.polling()
-while True:
-    try:
-        bot.polling(none_stop=True)
-    except:
-        time.sleep(2)
+bot.polling()
+# while True:
+#     try:
+#         bot.polling(none_stop=True)
+#     except:
+#         time.sleep(2)
 
 
 
